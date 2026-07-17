@@ -1,12 +1,11 @@
-#include "numeric_sequence.hpp"
 #include <iostream>
+#include <stdexcept>
+#include "numeric_sequence.hpp"
 
 int main()
 {
   gordejchik::EvenCount evenCount;
   gordejchik::LocalMax localMax;
-
-  std::cout << "Enter sequence:\n";
 
   int currentNumber = 0;
   while (std::cin >> currentNumber && currentNumber != 0)
@@ -17,17 +16,28 @@ int main()
 
   if (std::cin.fail())
   {
-    std::cerr << "Error: sequence contains non-numeric characters\n";
+    if (std::cin.eof())
+    {
+      std::cerr << "Error: sequence doesn't end with a zero\n";
+    }
+    else
+    {
+      std::cerr << "Error: sequence contains non-numeric characters\n";
+    }
     return 1;
   }
 
-  if (std::cin.eof() && currentNumber != 0)
+  std::cout << evenCount.getResult() << '\n';
+
+  try
   {
-    std::cerr << "Error: sequence doesn't end with a zero\n";
-    return 1;
+    std::cout << localMax.getResult() << '\n';
   }
-
-  gordejchik::printResults(evenCount, localMax);
+  catch (const std::logic_error& e)
+  {
+    std::cerr << e.what() << '\n';
+    return 2;
+  }
 
   return 0;
 }

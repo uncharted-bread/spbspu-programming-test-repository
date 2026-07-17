@@ -5,31 +5,31 @@
 
 namespace gordejchik
 {
-  struct EvenCount
+  class EvenCount
   {
-    size_t maxEvenCount;
-    size_t currentEvenCount;
-    size_t totalNumbers;
-
+  public:
     EvenCount();
     void update(int number);
     size_t getResult() const;
+
+  private:
+    size_t maxEvenCount_;
+    size_t currentEvenCount_;
   };
 
-  struct LocalMax
+  class LocalMax
   {
-    size_t localMaxCount;
-    int previousNumber;
-    int currentNumber;
-    int nextNumber;
-    size_t totalNumbers;
-
+  public:
     LocalMax();
     void update(int number);
     size_t getResult() const;
-  };
 
-  void printResults(const EvenCount& evenCount, const LocalMax& localMax);
+  private:
+    size_t localMaxCount_;
+    int previousNumber_;
+    int currentNumber_;
+    size_t totalNumbers_;
+  };
 }
 
 #endif
