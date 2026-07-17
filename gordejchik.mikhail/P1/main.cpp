@@ -1,17 +1,23 @@
+#include <cstddef>
+#include <exception>
 #include <iostream>
-#include <stdexcept>
 #include "numeric_sequence.hpp"
 
 int main()
 {
   gordejchik::EvenCount evenCount;
   gordejchik::LocalMax localMax;
+  gordejchik::SeqProperty* properties[] = {&evenCount, &localMax};
+  const size_t propertyCount = sizeof(properties) / sizeof(properties[0]);
 
   int currentNumber = 0;
   while (std::cin >> currentNumber && currentNumber != 0)
   {
-    evenCount.update(currentNumber);
-    localMax.update(currentNumber);
+    for (size_t i = 0; i < propertyCount; ++i)
+    {
+      gordejchik::SeqProperty& property = *(properties[i]);
+      property(currentNumber);
+    }
   }
 
   if (std::cin.fail())
@@ -27,17 +33,21 @@ int main()
     return 1;
   }
 
-  std::cout << evenCount.getResult() << '\n';
-
-  try
+  int returnCode = 0;
+  for (size_t i = 0; i < propertyCount; ++i)
   {
-    std::cout << localMax.getResult() << '\n';
-  }
-  catch (const std::logic_error& e)
-  {
-    std::cerr << e.what() << '\n';
-    return 2;
+    const gordejchik::SeqProperty& property = *(properties[i]);
+    try
+    {
+      const size_t value = property();
+      std::cout << value << '\n';
+    }
+    catch (const std::exception& e)
+    {
+      std::cerr << e.what() << '\n';
+      returnCode = 2;
+    }
   }
 
-  return 0;
+  return returnCode;
 }
